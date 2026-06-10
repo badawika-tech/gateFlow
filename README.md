@@ -17,7 +17,7 @@ LogicFlow is a completely revamped, modern logic circuit drawing software design
 
 LogicFlow is available as a standalone executable (`.exe`) file, ready for direct download and immediate use without the need for any pre-installation, Python environment, or setup!
 
-👉 **[Download the Latest Release here](https://github.com/badawika-tech/gateFlow/releases/latest)**
+👉 **[Download the Latest Release here](https://github.com/badawika-tech/gateFlow/releases/**
 
 ### Download Older Versions
 To download previous versions or explore all available releases, please visit the **[Releases](https://github.com/badawika-tech/gateFlow/releases)** section.
