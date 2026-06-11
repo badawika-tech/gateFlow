@@ -24,6 +24,76 @@ from schemdraw.parsing import logicparse
 ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("blue")
 
+class OnboardingScreen(ctk.CTkToplevel):
+    def __init__(self, master, on_close_callback):
+        super().__init__(master)
+        
+        self.title("LogicFlow - Onboarding")
+        
+        window_width = 550
+        window_height = 450
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        self.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        self.resizable(False, False)
+        self.configure(fg_color="#F3F4F6")
+        
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.on_close_callback = on_close_callback
+        
+        self.card = ctk.CTkFrame(self, fg_color="#FFFFFF", corner_radius=16, border_width=1, border_color="#E5E7EB")
+        self.card.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        self.title_label = ctk.CTkLabel(
+            self.card, 
+            text="⚡ Welcome to LogicFlow", 
+            font=ctk.CTkFont(family="Segoe UI", size=24, weight="bold"),
+            text_color="#111827"
+        )
+        self.title_label.pack(pady=(30, 10))
+        
+        instructions = (
+            "How to use:\n\n"
+            "• Enter your logic expression in the text box.\n"
+            "• Use the keypad or your keyboard to type.\n\n"
+            "⚠️ IMPORTANT ⚠️\n"
+            "You must enclose your functions in parentheses!\n"
+            "Even if you are writing a simple expression like 'a and b',\n"
+            "you MUST add parentheses, otherwise the circuit won't appear!\n\n"
+            "Example: (A and B) or C"
+        )
+        
+        self.inst_label = ctk.CTkLabel(
+            self.card,
+            text=instructions,
+            font=ctk.CTkFont(family="Segoe UI", size=16),
+            text_color="#374151",
+            justify="center"
+        )
+        self.inst_label.pack(pady=20, padx=20)
+        
+        self.start_btn = ctk.CTkButton(
+            self.card,
+            text="Got it!",
+            font=ctk.CTkFont(family="Segoe UI", size=16, weight="bold"),
+            command=self.on_close,
+            height=45,
+            width=200,
+            corner_radius=8,
+            fg_color="#2563EB",
+            hover_color="#1D4ED8"
+        )
+        self.start_btn.pack(pady=(10, 30))
+        
+        self.grab_set()
+
+    def on_close(self):
+        self.grab_release()
+        self.destroy()
+        self.on_close_callback()
+
 class LogicFlowApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -197,6 +267,13 @@ class LogicFlowApp(ctk.CTk):
             text_color="#6B7280"
         )
         self.credit_label.pack(side="left", padx=10)
+
+        # Show onboarding screen
+        self.withdraw()
+        self.onboarding = OnboardingScreen(self, self.show_main_window)
+
+    def show_main_window(self):
+        self.deiconify()
 
     def show_context_menu(self, event):
         try:
